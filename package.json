@@ -1,0 +1,20 @@
+{
+  "name": "downforce-node",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "lucide-react": "^0.473.0",
+    "mongoose": "^8.9.5",
+    "morgan": "~1.9.1",
+    "react": "^19.0.0",
+    "socketio": "^1.0.0"
+  }
+}
