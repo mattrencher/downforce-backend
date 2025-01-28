@@ -1,9 +1,8 @@
-const model = require('../models/User');
+const model = require('../models/UserModel');
 const response = require("../responses/APIResponse");
 const helper = require("../helpers/Helper");
 
 class UserController {
-    
     /**
      * Create a new user
      * @param req
