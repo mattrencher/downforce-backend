@@ -1,11 +1,46 @@
-class GameService {
+const model = require('../models/GameModel');
+const response = require("../responses/APIResponse");
+const helper = require('../helpers/Helper');
+
+class GameController {
     constructor(gameId) {
       this.gameId = gameId;
       this.speedCards = [];
       this.powerCards = [];
     }
-  
-    initializeGame() {
+
+    async list(req, res) {
+        // Get records from database
+        model.listWithPagination(req.app.get('page'), req.app.get('per_page'), req.app.get('list_all')).then(function (result) {
+            // Check if record exists
+            if (result) {
+                res.status(200).send(response.successWithPagination(result, req.app.get('page'), req.app.get('per_page')));
+            } else {
+                // Check if record is not found then send an empty data
+                res.status(200).send(response.successWithData());
+            }
+        }).catch(function (error) {
+            res.status(500).send(response.error(error, req.app.get('is_debug')));
+        });
+    }
+
+    async create(req, res) {
+      let new_game = {
+        "gameId": this.gameId,
+        "speedCards": this.speedCards,
+        "powerCards": this.powerCards
+      }
+
+      model.create(new_game)
+      .then((createdGame) => {
+          res.status(200).send(response.successWithData([createdGame]));
+      })
+      .catch(function (err) {
+          res.status(500).send(response.error(err, 'Error while creating game'));
+      });
+    }
+
+    initializeGame(req, res) {
       // Initialize speed cards deck
       const colors = ['red', 'blue', 'green', 'yellow', 'black', 'orange'];
       const speeds = [2, 4, 6, 8];
@@ -27,10 +62,24 @@ class GameService {
       // Shuffle decks
       this.shuffleDecks();
   
-      return {
-        speedCards: this.speedCards,
-        powerCards: this.powerCards
-      };
+      // return {
+      //   speedCards: this.speedCards,
+      //   powerCards: this.powerCards
+      // };
+
+      let new_game = {
+          "gameId": this.gameId,
+          "speedCards": this.speedCards,
+          "powerCards": this.powerCards
+      }
+
+      model.create(new_game)
+      .then((createdGame) => {
+          res.status(200).send(response.successWithData([createdGame]));
+      })
+      .catch(function (err) {
+          res.status(500).send(response.error(err, 'Error while creating game'));
+      });
     }
   
     shuffleDecks() {
@@ -132,4 +181,4 @@ class GameService {
     }
   }
   
-  module.exports = GameService;
+  module.exports = GameController;

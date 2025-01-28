@@ -4,7 +4,7 @@ export const joinGame = createAsyncThunk(
   'game/join',
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/games/${gameId}/join`, {
+      const response = await fetch(`/games/${gameId}/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const placeBid = createAsyncThunk(
   'game/placeBid',
   async ({ gameId, card }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/games/${gameId}/bid`, {
+      const response = await fetch(`/games/${gameId}/bid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
