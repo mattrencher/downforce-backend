@@ -1,23 +1,22 @@
 var createError = require('http-errors');
 var express = require('express');
+var app = express();
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config({path:__dirname+'/.env'});
+require("./config/database").connect();
 
 const http = require('http');
 const socketIo = require('socket.io');
-const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const gameRoutes = require('./routes/gameRoutes');
-
-var app = express();
+var usersRouter = require('./routes/user');
+const gameRoutes = require('./routes/game');
 
 const server = http.createServer(app);
 const io = socketIo(server);
-
-mongoose.connect('mongodb://127.0.0.1:27017/', {});
 
 // Socket.io event handlers
 io.on('connection', (socket) => {
@@ -45,7 +44,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -6,11 +6,15 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "express-validator": "^7.2.1",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.473.0",
     "mongoose": "^8.9.5",
     "morgan": "~1.9.1",
