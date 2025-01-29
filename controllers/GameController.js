@@ -44,7 +44,7 @@ class GameController {
       // Initialize speed cards deck
       const colors = ['red', 'blue', 'green', 'yellow', 'black', 'orange'];
       const speeds = [2, 4, 6, 8];
-      
+      this.speedCards = ['determined', 'cunning', 'aggressive', 'unpredictable', 'strategic', 'tricky'];
       colors.forEach(color => {
         speeds.forEach(speed => {
           // Add cards with different combinations of cars

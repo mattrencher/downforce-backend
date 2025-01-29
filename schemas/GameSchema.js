@@ -8,31 +8,15 @@ const GameSchema = new Schema({
     default: 'waiting'
   },
   players: [{
-    userId: String,
-    username: String,
-    cards: [String],
-    money: Number,
-    cars: [String],
-    powerCard: String,
-    isReady: Boolean,
-    currentBid: {
-      amount: Number,
-      cardPlayed: String
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }],
   currentPhase: {
     type: String,
-    enum: ['auction', 'race', 'betting'],
+    enum: ['auction', 'race', 'betting', 'finished'],
     default: 'auction'
   },
   auction: {
-    currentCar: String,
-    currentPowerCard: String,
-    bidsSubmitted: Number,
-    winner: {
-      playerId: String,
-      bid: Number
-    }
   },
   deck: {
     speedCards: [String],
