@@ -1,0 +1,37 @@
+# Copilot assistant / automation config (guidelines)
+# This file is intended for non-secret, high-level automation settings.
+# It is advisory: bots and Copilot-style agents should read and comply.
+
+rules:
+  max_pr_files: 50          # aim for smaller PRs
+  require_tests: true       # prefer PRs containing tests for behavior changes
+  require_lint: true        # run linting before opening PR
+  branch_prefixes:
+    - "copilot/"
+    - "feature/"
+  commit_message:
+    style: "short-subject + blank line + body"
+  reviewers:
+    - "mattrencher"        # primary code owner
+  secrets_policy: "never-commit"
+  changelog:
+    update_required: true
+
+templates:
+  pr_body_template: |
+    Summary:
+    - (short one-liner)
+
+    What I changed:
+    - bullet points
+
+    Why:
+    - reasoning
+
+    How to test:
+    - commands
+
+    Checklist:
+    - [ ] Tests added / updated
+    - [ ] Lint passed
+    - [ ] Docs updated
