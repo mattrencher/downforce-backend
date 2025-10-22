@@ -1,0 +1,232 @@
+# GitHub Copilot Configuration for Downforce Backend
+# This file contains rules and templates for AI assistants working on this repository
+
+version: 1.0
+
+# Assistant Rules
+rules:
+  # Code Quality
+  - name: "Maintain Code Style"
+    description: "Follow existing code patterns and conventions"
+    enforce: true
+    
+  - name: "Minimal Changes"
+    description: "Make the smallest possible changes to achieve goals"
+    enforce: true
+    
+  - name: "No Breaking Changes"
+    description: "Don't break existing functionality"
+    enforce: true
+
+  # Security
+  - name: "No Secrets"
+    description: "Never commit secrets, API keys, or credentials"
+    enforce: true
+    critical: true
+    
+  - name: "Input Validation"
+    description: "Always validate and sanitize user input"
+    enforce: true
+    critical: true
+    
+  - name: "Security Audit"
+    description: "Run npm audit before adding dependencies"
+    enforce: true
+
+  # Testing
+  - name: "Test Changes"
+    description: "Test all code changes before committing"
+    enforce: true
+    
+  - name: "Don't Remove Tests"
+    description: "Never remove or disable existing tests"
+    enforce: true
+
+# Code Templates
+
+templates:
+  # Express Route Template
+  express_route: |
+    const express = require('express');
+    const { validationResult } = require('express-validator');
+    const router = express.Router();
+    const Controller = require('../controllers/YourController');
+    
+    router.METHOD('/path', async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      
+      try {
+        const controller = new Controller();
+        const result = await controller.method(req.body);
+        res.json(result);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+    
+    module.exports = router;
+
+  # Mongoose Model Template
+  mongoose_model: |
+    const mongoose = require('mongoose');
+    
+    const schema = new mongoose.Schema({
+      fieldName: {
+        type: String,
+        required: true
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      },
+      updatedAt: {
+        type: Date,
+        default: Date.now
+      }
+    });
+    
+    // Add indexes if needed
+    schema.index({ fieldName: 1 });
+    
+    module.exports = mongoose.model('ModelName', schema);
+
+  # Controller Template
+  controller: |
+    class YourController {
+      constructor() {
+        // Initialize dependencies
+      }
+      
+      async yourMethod(data) {
+        try {
+          // Your business logic here
+          return result;
+        } catch (error) {
+          throw new Error(`Error in yourMethod: ${error.message}`);
+        }
+      }
+    }
+    
+    module.exports = YourController;
+
+  # Socket.io Event Handler
+  socket_handler: |
+    socket.on('eventName', async (data) => {
+      try {
+        // Validate input
+        if (!data || !data.requiredField) {
+          return socket.emit('error', 'Missing required field');
+        }
+        
+        // Process the event
+        const result = await processEvent(data);
+        
+        // Emit response
+        io.to(data.roomId).emit('eventResponse', result);
+      } catch (error) {
+        socket.emit('error', error.message);
+      }
+    });
+
+# PR Body Template
+pr_template: |
+  ## Description
+  Brief description of what this PR does.
+  
+  ## Changes
+  - List of changes made
+  - Another change
+  
+  ## Testing
+  - [ ] Manual testing completed
+  - [ ] Existing tests pass
+  - [ ] New tests added (if applicable)
+  
+  ## Security
+  - [ ] No secrets or credentials committed
+  - [ ] Input validation added/verified
+  - [ ] npm audit shows no new vulnerabilities
+  
+  ## Documentation
+  - [ ] README updated (if needed)
+  - [ ] API documentation updated (if applicable)
+  - [ ] Comments added for complex logic
+  
+  ## Checklist
+  - [ ] Code follows existing style guidelines
+  - [ ] Changes are minimal and focused
+  - [ ] No breaking changes to existing functionality
+  - [ ] Error handling is appropriate
+
+# File Patterns to Watch
+watch_patterns:
+  # Critical files requiring extra care
+  critical:
+    - "app.js"
+    - "config/**/*.js"
+    - "models/**/*.js"
+    - ".env*"
+  
+  # Files that need tests
+  test_required:
+    - "controllers/**/*.js"
+    - "routes/**/*.js"
+    - "helpers/**/*.js"
+  
+  # Files to never commit
+  never_commit:
+    - ".env"
+    - ".env.*"
+    - "**/*secret*"
+    - "**/*password*"
+    - "**/*key*.pem"
+    - "node_modules/**"
+
+# Dependency Guidelines
+dependencies:
+  # Check before adding
+  verify_before_add:
+    - "Run npm audit"
+    - "Check package popularity and maintenance"
+    - "Verify license compatibility"
+    
+  # Update policy
+  update_policy:
+    patch: "auto-approve"
+    minor: "review-required"
+    major: "thorough-review-required"
+
+# Code Quality Metrics
+quality_standards:
+  max_function_length: 50
+  max_file_length: 500
+  max_complexity: 10
+  require_error_handling: true
+  require_input_validation: true
+
+# Helpful Commands
+commands:
+  start_server: "npm start"
+  install_deps: "npm install"
+  check_security: "npm audit"
+  format_check: "npm run lint" # if available
+  
+# Environment Variables Required
+required_env_vars:
+  - "MONGODB_URI or similar database connection"
+  - "JWT_SECRET for authentication"
+  - "PORT for server configuration"
+
+# Notes for AI Assistants
+notes: |
+  - This is a game backend for Downforce racing board game
+  - Real-time features use Socket.io - be careful with event handlers
+  - Database is MongoDB - use Mongoose for all DB operations
+  - Authentication uses JWT - protect routes appropriately
+  - Always handle async operations with try-catch
+  - Follow RESTful conventions for API endpoints
+  - Socket events should validate input before processing
+  - Never expose sensitive data in error messages
